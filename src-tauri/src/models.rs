@@ -60,6 +60,8 @@ pub struct AppSettings {
     pub theme: String,
     #[serde(default = "default_minimize_to_tray")]
     pub minimize_to_tray: bool,
+    #[serde(default)]
+    pub launch_at_login: bool,
 }
 
 fn default_theme() -> String {
@@ -90,6 +92,7 @@ impl Default for AppSettings {
             bridge_port: 17888,
             theme: default_theme(),
             minimize_to_tray: default_minimize_to_tray(),
+            launch_at_login: false,
         }
     }
 }

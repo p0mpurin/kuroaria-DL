@@ -13,89 +13,99 @@
   --color-border: var(--app-border);
   --color-accent: var(--app-accent);
   --color-accent-foreground: var(--app-accent-foreground);
+  --color-brand: var(--app-brand);
   --color-sidebar: var(--app-sidebar);
   --color-sidebar-foreground: var(--app-sidebar-foreground);
   --color-sidebar-muted: var(--app-sidebar-muted);
   --color-sidebar-border: var(--app-sidebar-border);
+  --color-sidebar-active: var(--app-sidebar-active);
   --color-grid-line: var(--app-grid-line);
   --color-grid-bg: var(--app-grid-bg);
 }
 
-/* Light */
+/* Light — cream + logo blue */
 :root,
 [data-theme="light"] {
-  --app-background: #fafafa;
-  --app-foreground: #18181b;
-  --app-card: #ffffff;
-  --app-card-foreground: #18181b;
-  --app-muted: #f4f4f5;
-  --app-muted-foreground: #71717a;
-  --app-border: #e4e4e7;
-  --app-accent: #18181b;
-  --app-accent-foreground: #fafafa;
-  --app-sidebar: #09090b;
-  --app-sidebar-foreground: #fafafa;
-  --app-sidebar-muted: #a1a1aa;
-  --app-sidebar-border: #27272a;
-  --app-grid-bg: #f4f4f5;
-  --app-grid-line: rgb(228 228 231 / 0.45);
+  --app-brand: #3d5cad;
+  --app-background: #f4efe4;
+  --app-foreground: #1a1d26;
+  --app-card: #faf7f0;
+  --app-card-foreground: #1a1d26;
+  --app-muted: #ebe6da;
+  --app-muted-foreground: #5c6378;
+  --app-border: #d9d2c4;
+  --app-accent: #3d5cad;
+  --app-accent-foreground: #ffffff;
+  --app-sidebar: #12141c;
+  --app-sidebar-foreground: #f4efe4;
+  --app-sidebar-muted: #9ca3b8;
+  --app-sidebar-border: #2a3042;
+  --app-sidebar-active: rgb(61 92 173 / 0.22);
+  --app-grid-bg: #ede8dd;
+  --app-grid-line: rgb(61 92 173 / 0.12);
 }
 
-/* Dark (default) */
+/* Kuro dark — brand navy, blue accents (default) */
 [data-theme="dark"] {
-  --app-background: #18181b;
-  --app-foreground: #fafafa;
-  --app-card: #27272a;
-  --app-card-foreground: #fafafa;
-  --app-muted: #3f3f46;
-  --app-muted-foreground: #a1a1aa;
-  --app-border: #3f3f46;
-  --app-accent: #fafafa;
-  --app-accent-foreground: #18181b;
-  --app-sidebar: #09090b;
-  --app-sidebar-foreground: #fafafa;
-  --app-sidebar-muted: #71717a;
-  --app-sidebar-border: #27272a;
-  --app-grid-bg: #1c1c1f;
-  --app-grid-line: rgb(63 63 70 / 0.5);
+  --app-brand: #6b92e8;
+  --app-background: #0f1117;
+  --app-foreground: #e8ebf4;
+  --app-card: #171a23;
+  --app-card-foreground: #f0f2f8;
+  --app-muted: #1f2433;
+  --app-muted-foreground: #949bb3;
+  --app-border: #2b3145;
+  --app-accent: #5b82e0;
+  --app-accent-foreground: #f8faff;
+  --app-sidebar: #0a0c12;
+  --app-sidebar-foreground: #e8ebf4;
+  --app-sidebar-muted: #6f7894;
+  --app-sidebar-border: #232a3d;
+  --app-sidebar-active: rgb(91 130 224 / 0.18);
+  --app-grid-bg: #12151e;
+  --app-grid-line: rgb(107 146 232 / 0.07);
 }
 
-/* Midnight — deep blue-gray */
+/* Midnight — deeper blue from the logo kanji */
 [data-theme="midnight"] {
-  --app-background: #0c1222;
-  --app-foreground: #e2e8f0;
-  --app-card: #151d2e;
-  --app-card-foreground: #f1f5f9;
-  --app-muted: #1e293b;
-  --app-muted-foreground: #94a3b8;
-  --app-border: #243044;
-  --app-accent: #38bdf8;
-  --app-accent-foreground: #0c1222;
-  --app-sidebar: #060a14;
-  --app-sidebar-foreground: #e2e8f0;
-  --app-sidebar-muted: #64748b;
-  --app-sidebar-border: #1e293b;
-  --app-grid-bg: #0f1628;
-  --app-grid-line: rgb(36 48 68 / 0.55);
+  --app-brand: #7ba3ff;
+  --app-background: #070b14;
+  --app-foreground: #dde6f8;
+  --app-card: #101828;
+  --app-card-foreground: #edf2fc;
+  --app-muted: #162033;
+  --app-muted-foreground: #8fa0c4;
+  --app-border: #243352;
+  --app-accent: #6890f0;
+  --app-accent-foreground: #f5f8ff;
+  --app-sidebar: #050810;
+  --app-sidebar-foreground: #dde6f8;
+  --app-sidebar-muted: #6b7c9e;
+  --app-sidebar-border: #1a2740;
+  --app-sidebar-active: rgb(104 144 240 / 0.2);
+  --app-grid-bg: #0a101c;
+  --app-grid-line: rgb(123 163 255 / 0.08);
 }
 
-/* AMOLED — pure black */
+/* AMOLED — true black, soft blue highlights */
 [data-theme="amoled"] {
+  --app-brand: #7ba3ff;
   --app-background: #000000;
-  --app-foreground: #ededed;
-  --app-card: #0a0a0a;
-  --app-card-foreground: #fafafa;
-  --app-muted: #171717;
-  --app-muted-foreground: #a3a3a3;
-  --app-border: #262626;
-  --app-accent: #fafafa;
-  --app-accent-foreground: #000000;
+  --app-foreground: #e6e9f2;
+  --app-card: #0c0c0f;
+  --app-card-foreground: #f2f4fa;
+  --app-muted: #141418;
+  --app-muted-foreground: #8a90a6;
+  --app-border: #22222c;
+  --app-accent: #6b92e8;
+  --app-accent-foreground: #ffffff;
   --app-sidebar: #000000;
-  --app-sidebar-foreground: #fafafa;
-  --app-sidebar-muted: #737373;
-  --app-sidebar-border: #262626;
-  --app-grid-bg: #050505;
-  --app-grid-line: rgb(38 38 38 / 0.6);
+  --app-sidebar-foreground: #e6e9f2;
+  --app-sidebar-muted: #6a7088;
+  --app-sidebar-border: #1a1a22;
+  --app-sidebar-active: rgb(107 146 232 / 0.16);
+  --app-grid-bg: #050506;
+  --app-grid-line: rgb(107 146 232 / 0.06);
 }
 
 @layer base {
@@ -123,4 +133,11 @@
     linear-gradient(to right, var(--app-grid-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--app-grid-line) 1px, transparent 1px);
   background-size: 20px 20px;
+}
+
+/* Subtle brand glow on selected download cards */
+[data-theme="dark"] .download-card-selected,
+[data-theme="midnight"] .download-card-selected,
+[data-theme="amoled"] .download-card-selected {
+  box-shadow: 0 0 0 1px var(--app-accent), 0 4px 24px rgb(91 130 224 / 0.12);
 }

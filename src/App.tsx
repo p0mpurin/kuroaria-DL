@@ -48,6 +48,8 @@ const defaultSettings: AppSettings = {
 
   minimize_to_tray: true,
 
+  launch_at_login: false,
+
 };
 
 

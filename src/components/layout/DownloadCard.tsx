@@ -54,8 +54,8 @@ export function DownloadCard({
       className={cn(
         "cursor-pointer rounded-xl border bg-card px-5 py-4 shadow-sm transition-shadow",
         selected
-          ? "border-accent ring-1 ring-accent"
-          : "border-border hover:border-muted-foreground/40",
+          ? "download-card-selected border-brand ring-1 ring-brand/50"
+          : "border-border hover:border-brand/30",
       )}
     >
       <motion.div className="flex items-start gap-4">

@@ -1,10 +1,10 @@
 import type { AppSettings, AppTheme } from "@/lib/types";
 
 export const THEMES: { id: AppTheme; label: string; description: string }[] = [
-  { id: "dark", label: "Dark", description: "Balanced dark gray" },
-  { id: "midnight", label: "Midnight", description: "Deep blue-gray" },
-  { id: "amoled", label: "AMOLED", description: "True black" },
-  { id: "light", label: "Light", description: "Classic light" },
+  { id: "dark", label: "Kuro", description: "Brand dark with blue accents" },
+  { id: "midnight", label: "Midnight", description: "Deep navy from the logo" },
+  { id: "amoled", label: "AMOLED", description: "Pure black, soft blue glow" },
+  { id: "light", label: "Cream", description: "Light cream + logo blue" },
 ];
 
 export function applyTheme(theme: AppTheme) {

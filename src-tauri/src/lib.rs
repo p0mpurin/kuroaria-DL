@@ -12,6 +12,8 @@ mod persistence;
 
 mod runtime;
 
+mod startup;
+
 mod state;
 
 
@@ -145,6 +147,10 @@ pub fn run() {
     tauri::Builder::default()
 
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            None,
+        ))
 
         .manage(shared.clone())
 
@@ -321,6 +327,12 @@ pub fn run() {
                 )
 
                 .await;
+
+                if let Err(e) =
+                    startup::sync_launch_at_login(app.handle(), settings.launch_at_login)
+                {
+                    eprintln!("launch at login: {e}");
+                }
 
             });
 

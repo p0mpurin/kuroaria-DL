@@ -6,6 +6,7 @@ import {
   Settings,
   XCircle,
 } from "lucide-react";
+import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { ViewId } from "@/lib/types";
@@ -36,13 +37,7 @@ export function Sidebar({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <motion.div
-          className="flex h-9 w-9 items-center justify-center rounded-md border border-sidebar-border bg-sidebar text-sm font-bold tracking-tight"
-          whileHover={{ scale: 1.02 }}
-        >
-          KA
-        </motion.div>
-        <span className="text-sm font-semibold tracking-tight">KuroAria DL</span>
+        <Logo size="md" showText />
       </motion.div>
 
       <nav className="flex flex-1 flex-col gap-1 px-3">
@@ -57,8 +52,8 @@ export function Sidebar({
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                 active
-                  ? "bg-sidebar-border text-sidebar-foreground"
-                  : "text-sidebar-muted hover:bg-sidebar-border/60 hover:text-sidebar-foreground",
+                  ? "bg-sidebar-active text-sidebar-foreground ring-1 ring-brand/25"
+                  : "text-sidebar-muted hover:bg-sidebar-active/50 hover:text-sidebar-foreground",
               )}
             >
               <Icon className="h-4 w-4 shrink-0" strokeWidth={1.75} />
@@ -80,7 +75,7 @@ export function Sidebar({
           className={cn(
             "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
             activeView === "settings"
-              ? "bg-sidebar-border text-sidebar-foreground"
+              ? "bg-sidebar-active text-sidebar-foreground"
               : "text-sidebar-muted hover:text-sidebar-foreground",
           )}
         >

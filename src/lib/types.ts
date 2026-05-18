@@ -49,6 +49,7 @@ export interface AppSettings {
   bridge_port: number;
   theme: AppTheme;
   minimize_to_tray: boolean;
+  launch_at_login: boolean;
 }
 
 export interface DownloadsSnapshot {

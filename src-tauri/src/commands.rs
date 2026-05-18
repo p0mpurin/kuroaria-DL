@@ -6,6 +6,7 @@ use crate::models::{
 };
 use crate::bridge::BridgeHandle;
 use crate::runtime::RuntimePrefs;
+use crate::startup;
 use crate::state::{self, SharedState};
 
 #[tauri::command]
@@ -95,6 +96,7 @@ pub fn get_selected_id(state: State<'_, SharedState>) -> Option<String> {
 
 #[tauri::command]
 pub async fn update_settings(
+    app: tauri::AppHandle,
     state: State<'_, SharedState>,
     bridge: State<'_, BridgeHandle>,
     runtime: State<'_, RuntimePrefs>,
@@ -107,6 +109,7 @@ pub async fn update_settings(
         .update_settings(settings)
         .await
         .map_err(|e| e.to_string())?;
+    startup::sync_launch_at_login(&app, saved.launch_at_login)?;
     state::sync_bridge_after_settings(&bridge, &state, &saved).await;
     Ok(saved)
 }

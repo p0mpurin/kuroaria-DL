@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Logo } from "@/components/Logo";
 import { ThemePicker } from "@/components/ThemePicker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,9 +67,14 @@ export function SettingsView({
   return (
     <main className="grid-paper flex min-w-0 flex-1 flex-col overflow-y-auto">
       <div className="mx-auto w-full max-w-xl px-8 py-8">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">
-          Settings
-        </h1>
+        <div className="flex items-center gap-4">
+          <Logo size="lg" />
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              Settings
+            </h1>
+          </div>
+        </div>
         <p className="mt-1 text-sm text-muted-foreground">
           aria2 {aria2Connected ? "connected" : "disconnected"}
         </p>
@@ -97,6 +103,26 @@ export function SettingsView({
                 onCheckedChange={(v) => {
                   if (v === settings.minimize_to_tray) return;
                   void saveToggle({ minimize_to_tray: v });
+                }}
+              />
+            </div>
+          </section>
+
+          <section className="space-y-4 border-t border-border pt-6">
+            <h2 className="text-sm font-semibold text-foreground">System</h2>
+            <div className="flex items-center justify-between">
+              <div>
+                <Label>Start with Windows</Label>
+                <p className="text-xs text-muted-foreground">
+                  Launch KuroAria DL when you sign in
+                </p>
+              </div>
+              <Switch
+                checked={draft.launch_at_login}
+                disabled={saving}
+                onCheckedChange={(v) => {
+                  if (v === settings.launch_at_login) return;
+                  void saveToggle({ launch_at_login: v });
                 }}
               />
             </div>
