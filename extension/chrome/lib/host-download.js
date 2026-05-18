@@ -51,12 +51,27 @@
     return typeof item.bytesReceived === "number" ? item.bytesReceived : 0;
   }
 
+  function isRiskyPending(item) {
+    const danger = item.danger;
+    if (!danger || danger === "safe" || danger === "accepted") {
+      return false;
+    }
+    return true;
+  }
+
+  function userAcceptedRisk(item) {
+    return item.danger === "accepted";
+  }
+
   function interceptReady(item) {
     const url = item.url || "";
     if (!url.startsWith("http")) {
       return false;
     }
     if (isGofileMetadataUrl(url)) {
+      return false;
+    }
+    if (isRiskyPending(item)) {
       return false;
     }
     if (!isGofileHost(url)) {
@@ -68,6 +83,16 @@
 
     const total = downloadSizeBytes(item);
     const received = bytesReceived(item);
+
+    if (userAcceptedRisk(item)) {
+      if (total > 0 && total < MIN_GOFILE_BYTES) {
+        return false;
+      }
+      if (received > 0 && received < MIN_GOFILE_BYTES) {
+        return false;
+      }
+      return true;
+    }
 
     if (total >= MIN_GOFILE_BYTES || received >= MIN_GOFILE_BYTES) {
       return true;
@@ -85,6 +110,9 @@
     const url = item.url || "";
     if (!url.startsWith("http") || isGofileMetadataUrl(url)) {
       return false;
+    }
+    if (isRiskyPending(item)) {
+      return true;
     }
     if (!isGofileHost(url)) {
       return false;
@@ -150,6 +178,7 @@
     isGofileHost,
     isGofileCdnDownloadUrl,
     isGofileMetadataUrl,
+    isRiskyPending,
     interceptReady,
     shouldWatchDownload,
     cookiesHeaderForUrl,

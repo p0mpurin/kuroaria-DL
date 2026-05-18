@@ -71,7 +71,7 @@
     }
   }
 
-  async function tryHandOffById(downloadId) {
+  async function tryHandOffById(downloadId, reason) {
     if (!interceptEnabled || interceptedIds.has(downloadId)) {
       return;
     }
@@ -97,13 +97,57 @@
     let attempts = 0;
     const timer = setInterval(() => {
       attempts += 1;
-      if (!interceptEnabled || interceptedIds.has(downloadId) || attempts > 150) {
+      if (!interceptEnabled || interceptedIds.has(downloadId) || attempts > 200) {
         stopWatch(downloadId);
         return;
       }
-      void tryHandOffById(downloadId);
-    }, 400);
+      void tryHandOffById(downloadId, "poll");
+    }, 300);
     watchTimers.set(downloadId, timer);
+  }
+
+  function onDownloadCreated(item) {
+    if (!interceptEnabled || !item?.id || !item.url?.startsWith("http")) {
+      return;
+    }
+    if (host.isGofileMetadataUrl(item.url)) {
+      return;
+    }
+    if (host.isRiskyPending(item)) {
+      startWatch(item.id);
+      return;
+    }
+    if (host.shouldWatchDownload(item)) {
+      startWatch(item.id);
+    }
+    void tryHandOffById(item.id, "created");
+  }
+
+  function onDownloadChanged(delta) {
+    if (!interceptEnabled || !delta.id || interceptedIds.has(delta.id)) {
+      return;
+    }
+
+    const danger = delta.danger?.current;
+    const state = delta.state?.current;
+
+    if (danger === "accepted") {
+      startWatch(delta.id);
+      void tryHandOffById(delta.id, "danger-accepted");
+      return;
+    }
+
+    if (danger === "safe" || state === "in_progress" || state === "complete") {
+      void tryHandOffById(delta.id, state || danger);
+    }
+
+    if (
+      delta.fileSize?.current !== undefined ||
+      delta.totalBytes?.current !== undefined ||
+      delta.bytesReceived?.current !== undefined
+    ) {
+      void tryHandOffById(delta.id, "size");
+    }
   }
 
   function setupDownloadIntercept() {
@@ -117,28 +161,8 @@
       });
     }
 
-    ext.downloads?.onCreated?.addListener((item) => {
-      if (!interceptEnabled || !item.url?.startsWith("http")) return;
-      if (host.isGofileMetadataUrl(item.url)) return;
-      if (host.shouldWatchDownload(item)) {
-        startWatch(item.id);
-      }
-      void tryHandOffById(item.id);
-    });
-
-    ext.downloads?.onChanged?.addListener((delta) => {
-      if (!interceptEnabled || !delta.id || interceptedIds.has(delta.id)) {
-        return;
-      }
-      if (
-        delta.fileSize?.current !== undefined ||
-        delta.totalBytes?.current !== undefined ||
-        delta.bytesReceived?.current !== undefined ||
-        delta.state?.current
-      ) {
-        void tryHandOffById(delta.id);
-      }
-    });
+    ext.downloads?.onCreated?.addListener(onDownloadCreated);
+    ext.downloads?.onChanged?.addListener(onDownloadChanged);
   }
 
   refreshInterceptFlag().then(() => {

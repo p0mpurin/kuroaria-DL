@@ -96,7 +96,7 @@
     }
   }
 
-  async function tryHandOffById(downloadId) {
+  async function tryHandOffById(downloadId, reason) {
     if (!interceptEnabled || interceptedIds.has(downloadId)) {
       return;
     }
@@ -111,6 +111,7 @@
       }
       if (host.interceptReady(item)) {
         stopWatch(downloadId);
+        console.info("KuroAria DL handoff:", reason || "ready", item.filename);
         await handOffToKuroAria(item);
       }
     } catch (e) {
@@ -129,13 +130,13 @@
         stopWatch(downloadId);
         return;
       }
-      if (attempts > 150) {
-        console.warn("KuroAria DL: gave up waiting for gofile size", downloadId);
+      if (attempts > 200) {
+        console.warn("KuroAria DL: gave up waiting for download", downloadId);
         stopWatch(downloadId);
         return;
       }
-      void tryHandOffById(downloadId);
-    }, 400);
+      void tryHandOffById(downloadId, "poll");
+    }, 300);
     watchTimers.set(downloadId, timer);
   }
 
@@ -150,10 +151,17 @@
     if (host.isGofileMetadataUrl(url)) {
       return;
     }
+
+    if (host.isRiskyPending(item)) {
+      console.info("KuroAria DL: risky download pending user Allow —", item.filename);
+      startWatch(item.id);
+      return;
+    }
+
     if (host.shouldWatchDownload(item)) {
       startWatch(item.id);
     }
-    void tryHandOffById(item.id);
+    void tryHandOffById(item.id, "created");
   }
 
   function onDownloadChanged(delta) {
@@ -164,16 +172,44 @@
       return;
     }
 
-    const sizeKnown =
-      delta.fileSize?.current !== undefined ||
-      delta.totalBytes?.current !== undefined;
-    const progress =
-      delta.bytesReceived?.current !== undefined ||
-      delta.state?.current === "in_progress" ||
-      delta.state?.current === "complete";
+    const danger = delta.danger?.current;
+    const state = delta.state?.current;
+    const paused = delta.paused?.current;
 
-    if (sizeKnown || progress) {
-      void tryHandOffById(delta.id);
+    if (danger === "accepted") {
+      console.info("KuroAria DL: user allowed risky download", delta.id);
+      startWatch(delta.id);
+      void tryHandOffById(delta.id, "danger-accepted");
+      return;
+    }
+
+    if (danger === "safe") {
+      void tryHandOffById(delta.id, "danger-safe");
+    }
+
+    if (state === "in_progress" && paused === false) {
+      void tryHandOffById(delta.id, "in-progress");
+    }
+
+    if (state === "complete") {
+      void tryHandOffById(delta.id, "complete");
+    }
+
+    if (
+      danger &&
+      danger !== "safe" &&
+      danger !== "accepted" &&
+      danger !== "allowlisted"
+    ) {
+      startWatch(delta.id);
+    }
+
+    if (
+      delta.fileSize?.current !== undefined ||
+      delta.totalBytes?.current !== undefined ||
+      delta.bytesReceived?.current !== undefined
+    ) {
+      void tryHandOffById(delta.id, "size");
     }
   }
 
@@ -186,18 +222,17 @@
           console.warn("KuroAria DL suggest():", e);
         }
       });
-      console.info("KuroAria DL: onDeterminingFilename (pass-through)");
     }
 
     if (ext.downloads?.onCreated) {
       ext.downloads.onCreated.addListener(onDownloadCreated);
-      console.info("KuroAria DL: onCreated listener registered");
     }
 
     if (ext.downloads?.onChanged) {
       ext.downloads.onChanged.addListener(onDownloadChanged);
-      console.info("KuroAria DL: onChanged listener registered");
     }
+
+    console.info("KuroAria DL: intercept listeners ready (incl. risky downloads)");
   }
 
   async function bootstrap() {
