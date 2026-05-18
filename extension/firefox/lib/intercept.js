@@ -140,6 +140,10 @@
     watchTimers.set(downloadId, timer);
   }
 
+  function reasonLabel(danger, state) {
+    return [danger, state].filter(Boolean).join("/");
+  }
+
   function onDownloadCreated(item) {
     if (!interceptEnabled || !item?.id) {
       return;
@@ -152,8 +156,12 @@
       return;
     }
 
-    if (host.isRiskyPending(item)) {
-      console.info("KuroAria DL: risky download pending user Allow —", item.filename);
+    if (host.isWaitingForUserAllow(item)) {
+      console.info(
+        "KuroAria DL: waiting for Allow (HTTP unsafe / risky) —",
+        item.filename,
+        item.danger || "",
+      );
       startWatch(item.id);
       return;
     }
@@ -176,11 +184,18 @@
     const state = delta.state?.current;
     const paused = delta.paused?.current;
 
-    if (danger === "accepted") {
-      console.info("KuroAria DL: user allowed risky download", delta.id);
+    if (
+      danger === "accepted" ||
+      danger === "insecure" ||
+      state === "in_progress"
+    ) {
+      console.info(
+        "KuroAria DL: download proceeding —",
+        reasonLabel(danger, state),
+        delta.id,
+      );
       startWatch(delta.id);
-      void tryHandOffById(delta.id, "danger-accepted");
-      return;
+      void tryHandOffById(delta.id, "proceeding");
     }
 
     if (danger === "safe") {

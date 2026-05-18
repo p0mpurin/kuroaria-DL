@@ -16,7 +16,7 @@
     }
     return (
       lower.includes("/download/") ||
-      /^https:\/\/file-[^/]+\.gofile\.io\//.test(lower)
+      /^https?:\/\/file-[^/]+\.gofile\.io\//.test(lower)
     );
   }
 
@@ -51,16 +51,24 @@
     return typeof item.bytesReceived === "number" ? item.bytesReceived : 0;
   }
 
-  function isRiskyPending(item) {
-    const danger = item.danger;
-    if (!danger || danger === "safe" || danger === "accepted") {
-      return false;
-    }
-    return true;
+  function isWaitingForUserAllow(item) {
+    return item.state === "interrupted";
   }
 
-  function userAcceptedRisk(item) {
-    return item.danger === "accepted";
+  function userProceedingWithDownload(item) {
+    const danger = item.danger;
+    if (
+      danger === "accepted" ||
+      danger === "allowlisted" ||
+      danger === "safe"
+    ) {
+      return true;
+    }
+    return item.state === "in_progress" || item.state === "complete";
+  }
+
+  function isHttpUrl(url) {
+    return (url || "").toLowerCase().startsWith("http://");
   }
 
   function interceptReady(item) {
@@ -71,7 +79,7 @@
     if (isGofileMetadataUrl(url)) {
       return false;
     }
-    if (isRiskyPending(item)) {
+    if (isWaitingForUserAllow(item)) {
       return false;
     }
     if (!isGofileHost(url)) {
@@ -84,7 +92,10 @@
     const total = downloadSizeBytes(item);
     const received = bytesReceived(item);
 
-    if (userAcceptedRisk(item)) {
+    if (userProceedingWithDownload(item)) {
+      if (isHttpUrl(url)) {
+        return true;
+      }
       if (total > 0 && total < MIN_GOFILE_BYTES) {
         return false;
       }
@@ -111,7 +122,7 @@
     if (!url.startsWith("http") || isGofileMetadataUrl(url)) {
       return false;
     }
-    if (isRiskyPending(item)) {
+    if (isWaitingForUserAllow(item)) {
       return true;
     }
     if (!isGofileHost(url)) {
@@ -178,7 +189,7 @@
     isGofileHost,
     isGofileCdnDownloadUrl,
     isGofileMetadataUrl,
-    isRiskyPending,
+    isWaitingForUserAllow,
     interceptReady,
     shouldWatchDownload,
     cookiesHeaderForUrl,

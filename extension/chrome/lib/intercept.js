@@ -113,7 +113,7 @@
     if (host.isGofileMetadataUrl(item.url)) {
       return;
     }
-    if (host.isRiskyPending(item)) {
+    if (host.isWaitingForUserAllow(item)) {
       startWatch(item.id);
       return;
     }
@@ -131,13 +131,16 @@
     const danger = delta.danger?.current;
     const state = delta.state?.current;
 
-    if (danger === "accepted") {
+    if (
+      danger === "accepted" ||
+      danger === "insecure" ||
+      state === "in_progress"
+    ) {
       startWatch(delta.id);
-      void tryHandOffById(delta.id, "danger-accepted");
-      return;
+      void tryHandOffById(delta.id, "proceeding");
     }
 
-    if (danger === "safe" || state === "in_progress" || state === "complete") {
+    if (danger === "safe" || state === "complete") {
       void tryHandOffById(delta.id, state || danger);
     }
 

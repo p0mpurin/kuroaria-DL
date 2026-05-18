@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "KuroAria DL",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Send browser downloads to KuroAria DL",
   "permissions": ["downloads", "activeTab", "storage", "cookies"],
   "host_permissions": [

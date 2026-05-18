@@ -9,7 +9,6 @@
     return lower.includes("gofile.io") || lower.includes("gofile.com");
   }
 
-  /** Direct CDN file link (not folder/API). */
   function isGofileCdnDownloadUrl(url) {
     const lower = (url || "").toLowerCase();
     if (!isGofileHost(lower)) {
@@ -17,11 +16,10 @@
     }
     return (
       lower.includes("/download/") ||
-      /^https:\/\/file-[^/]+\.gofile\.io\//.test(lower)
+      /^https?:\/\/file-[^/]+\.gofile\.io\//.test(lower)
     );
   }
 
-  /** API / JSON responses — not the real file. */
   function isGofileMetadataUrl(url) {
     const lower = (url || "").toLowerCase();
     if (lower.includes("api.gofile.io")) {
@@ -53,24 +51,31 @@
     return typeof item.bytesReceived === "number" ? item.bytesReceived : 0;
   }
 
-  /** Firefox blocked download until user clicks Allow. */
-  function isRiskyPending(item) {
-    const danger = item.danger;
-    if (!danger || danger === "safe" || danger === "accepted") {
-      return false;
-    }
-    return true;
-  }
-
-  function userAcceptedRisk(item) {
-    return item.danger === "accepted";
+  /** Waiting on Firefox "Allow" / HTTP unsafe prompt (state = interrupted). */
+  function isWaitingForUserAllow(item) {
+    return item.state === "interrupted";
   }
 
   /**
-   * Gofile: wait until total size or received bytes prove it's the real file.
-   * After the user allows a risky download, intercept the CDN link immediately.
-   * Other hosts: intercept immediately.
+   * User confirmed the download. HTTP keeps danger=insecure (never "accepted").
+   * HTTPS risky files may use danger=accepted once allowed.
    */
+  function userProceedingWithDownload(item) {
+    const danger = item.danger;
+    if (
+      danger === "accepted" ||
+      danger === "allowlisted" ||
+      danger === "safe"
+    ) {
+      return true;
+    }
+    return item.state === "in_progress" || item.state === "complete";
+  }
+
+  function isHttpUrl(url) {
+    return (url || "").toLowerCase().startsWith("http://");
+  }
+
   function interceptReady(item) {
     const url = item.url || "";
     if (!url.startsWith("http")) {
@@ -79,9 +84,10 @@
     if (isGofileMetadataUrl(url)) {
       return false;
     }
-    if (isRiskyPending(item)) {
+    if (isWaitingForUserAllow(item)) {
       return false;
     }
+
     if (!isGofileHost(url)) {
       return true;
     }
@@ -92,7 +98,10 @@
     const total = downloadSizeBytes(item);
     const received = bytesReceived(item);
 
-    if (userAcceptedRisk(item)) {
+    if (userProceedingWithDownload(item)) {
+      if (isHttpUrl(url)) {
+        return true;
+      }
       if (total > 0 && total < MIN_GOFILE_BYTES) {
         return false;
       }
@@ -119,7 +128,7 @@
     if (!url.startsWith("http") || isGofileMetadataUrl(url)) {
       return false;
     }
-    if (isRiskyPending(item)) {
+    if (isWaitingForUserAllow(item)) {
       return true;
     }
     if (!isGofileHost(url)) {
@@ -199,7 +208,7 @@
     isGofileHost,
     isGofileCdnDownloadUrl,
     isGofileMetadataUrl,
-    isRiskyPending,
+    isWaitingForUserAllow,
     interceptReady,
     shouldWatchDownload,
     cookiesHeaderForUrl,
