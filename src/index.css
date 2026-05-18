@@ -21,6 +21,9 @@
   --color-sidebar-active: var(--app-sidebar-active);
   --color-grid-line: var(--app-grid-line);
   --color-grid-bg: var(--app-grid-bg);
+  --color-input: var(--app-input);
+  --color-input-border: var(--app-input-border);
+  --color-input-placeholder: var(--app-input-placeholder);
 }
 
 /* Light — cream + logo blue */
@@ -43,18 +46,24 @@
   --app-sidebar-active: rgb(61 92 173 / 0.22);
   --app-grid-bg: #ede8dd;
   --app-grid-line: rgb(61 92 173 / 0.12);
+  --app-input: #faf7f0;
+  --app-input-border: #d9d2c4;
+  --app-input-placeholder: #6b7288;
 }
 
 /* Kuro dark — brand navy, blue accents (default) */
 [data-theme="dark"] {
-  --app-brand: #6b92e8;
+  --app-brand: #7ba3ff;
   --app-background: #0f1117;
-  --app-foreground: #e8ebf4;
-  --app-card: #171a23;
-  --app-card-foreground: #f0f2f8;
-  --app-muted: #1f2433;
-  --app-muted-foreground: #949bb3;
-  --app-border: #2b3145;
+  --app-foreground: #eef1fa;
+  --app-card: #181c28;
+  --app-card-foreground: #f4f6fc;
+  --app-muted: #222836;
+  --app-muted-foreground: #b4bdd4;
+  --app-border: #343d56;
+  --app-input: #1c2130;
+  --app-input-border: #3d4763;
+  --app-input-placeholder: #9aa6c4;
   --app-accent: #5b82e0;
   --app-accent-foreground: #f8faff;
   --app-sidebar: #0a0c12;
@@ -68,14 +77,17 @@
 
 /* Midnight — deeper blue from the logo kanji */
 [data-theme="midnight"] {
-  --app-brand: #7ba3ff;
+  --app-brand: #8ab4ff;
   --app-background: #070b14;
-  --app-foreground: #dde6f8;
-  --app-card: #101828;
-  --app-card-foreground: #edf2fc;
-  --app-muted: #162033;
-  --app-muted-foreground: #8fa0c4;
-  --app-border: #243352;
+  --app-foreground: #e4ecfb;
+  --app-card: #121c2e;
+  --app-card-foreground: #f0f5ff;
+  --app-muted: #1a2740;
+  --app-muted-foreground: #a8b8d8;
+  --app-border: #2d4060;
+  --app-input: #0f1828;
+  --app-input-border: #3a5278;
+  --app-input-placeholder: #8fa4cc;
   --app-accent: #6890f0;
   --app-accent-foreground: #f5f8ff;
   --app-sidebar: #050810;
@@ -89,14 +101,17 @@
 
 /* AMOLED — true black, soft blue highlights */
 [data-theme="amoled"] {
-  --app-brand: #7ba3ff;
+  --app-brand: #8ab4ff;
   --app-background: #000000;
-  --app-foreground: #e6e9f2;
-  --app-card: #0c0c0f;
-  --app-card-foreground: #f2f4fa;
-  --app-muted: #141418;
-  --app-muted-foreground: #8a90a6;
-  --app-border: #22222c;
+  --app-foreground: #eceff8;
+  --app-card: #0e0e12;
+  --app-card-foreground: #f6f7fc;
+  --app-muted: #16161c;
+  --app-muted-foreground: #a8aec4;
+  --app-border: #2a2a36;
+  --app-input: #121218;
+  --app-input-border: #333340;
+  --app-input-placeholder: #949aac;
   --app-accent: #6b92e8;
   --app-accent-foreground: #ffffff;
   --app-sidebar: #000000;
@@ -135,9 +150,21 @@
   background-size: 20px 20px;
 }
 
-/* Subtle brand glow on selected download cards */
-[data-theme="dark"] .download-card-selected,
-[data-theme="midnight"] .download-card-selected,
-[data-theme="amoled"] .download-card-selected {
-  box-shadow: 0 0 0 1px var(--app-accent), 0 4px 24px rgb(91 130 224 / 0.12);
+/* Selected download cards — inset ring avoids scroll clipping */
+.download-card-selected {
+  border-color: var(--app-brand);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--app-brand) 55%, transparent),
+    0 4px 20px color-mix(in srgb, var(--app-brand) 14%, transparent);
+}
+
+[data-theme="light"] .download-card-selected {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--app-brand) 40%, transparent),
+    0 2px 12px color-mix(in srgb, var(--app-brand) 12%, transparent);
+}
+
+/* Scroll list: room for card borders and shadows */
+.download-list {
+  padding: 2px 4px 8px 2px;
 }

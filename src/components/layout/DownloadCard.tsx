@@ -48,14 +48,13 @@ export function DownloadCard({
       layout
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.005 }}
       transition={{ duration: 0.2 }}
       onClick={onSelect}
       className={cn(
-        "cursor-pointer rounded-xl border bg-card px-5 py-4 shadow-sm transition-shadow",
+        "cursor-pointer rounded-xl border bg-card px-5 py-4 shadow-sm transition-[border-color,box-shadow]",
         selected
-          ? "download-card-selected border-brand ring-1 ring-brand/50"
-          : "border-border hover:border-brand/30",
+          ? "download-card-selected"
+          : "border-border hover:border-brand/40 hover:shadow-md",
       )}
     >
       <motion.div className="flex items-start gap-4">

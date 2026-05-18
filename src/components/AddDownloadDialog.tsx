@@ -38,15 +38,15 @@ export function AddDownloadDialog({
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/40" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-xl border border-zinc-200 bg-white p-6 shadow-xl">
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-xl border border-border bg-card p-6 shadow-xl">
           <div className="mb-4 flex items-center justify-between">
-            <Dialog.Title className="text-lg font-semibold text-zinc-900">
+            <Dialog.Title className="text-lg font-semibold text-foreground">
               Add Download
             </Dialog.Title>
             <Dialog.Close asChild>
               <button
                 type="button"
-                className="rounded-md p-1 text-zinc-500 hover:bg-zinc-100"
+                className="rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
               >
                 <X className="h-4 w-4" />
               </button>

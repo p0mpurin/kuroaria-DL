@@ -106,7 +106,7 @@ export function MainPanel({
         {showQuickAdd && <UrlQuickAdd onAdd={onAddUrl} />}
 
         <ScrollArea className="flex-1">
-          <div className="space-y-3 pr-3">
+          <div className="download-list space-y-3">
             {filtered.length === 0 ? (
               <p className="py-12 text-center text-sm text-muted-foreground">
                 No downloads in this view.

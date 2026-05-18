@@ -54,9 +54,9 @@ export function UrlQuickAdd({ onAdd }: UrlQuickAddProps) {
   };
 
   return (
-    <div className="mb-5 rounded-xl border border-zinc-200 bg-white/80 p-3 shadow-sm backdrop-blur-sm">
-      <div className="flex items-center gap-2">
-        <Link2 className="h-4 w-4 shrink-0 text-zinc-400" strokeWidth={1.75} />
+    <section className="url-quick-add mb-5 rounded-xl border border-border bg-card p-1.5 shadow-sm">
+      <div className="flex items-center gap-2 rounded-lg border border-input-border bg-input px-2 py-1">
+        <Link2 className="h-4 w-4 shrink-0 text-brand" strokeWidth={1.75} />
         <Input
           value={value}
           onChange={(e) => {
@@ -67,14 +67,14 @@ export function UrlQuickAdd({ onAdd }: UrlQuickAddProps) {
             if (e.key === "Enter") void submit();
           }}
           placeholder="Paste download URL and press Enter"
-          className="h-9 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
+          className="h-9 min-w-0 flex-1 border-0 bg-transparent px-1 shadow-none focus-visible:border-transparent focus-visible:ring-0"
           disabled={loading}
         />
         <Button
           type="button"
           variant="outline"
           size="sm"
-          className="shrink-0"
+          className="shrink-0 border-input-border bg-card/60"
           onClick={() => void pasteFromClipboard()}
           disabled={loading}
           title="Paste URL from clipboard"
@@ -94,8 +94,8 @@ export function UrlQuickAdd({ onAdd }: UrlQuickAddProps) {
         </Button>
       </div>
       {error && (
-        <p className="mt-2 pl-6 text-xs text-red-600">{error}</p>
+        <p className="mt-2 px-2 text-xs text-red-500">{error}</p>
       )}
-    </div>
+    </section>
   );
 }
