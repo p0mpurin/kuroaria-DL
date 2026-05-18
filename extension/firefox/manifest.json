@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "KuroAria DL",
+  "version": "0.1.6",
+  "description": "Send Firefox downloads to KuroAria DL",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "kuroaria-dl@local.dev",
+      "strict_min_version": "114.0"
+    }
+  },
+  "permissions": ["downloads", "activeTab", "contextMenus", "storage", "tabs", "cookies"],
+  "host_permissions": [
+    "http://127.0.0.1/*",
+    "ws://127.0.0.1/*",
+    "https://*.gofile.io/*",
+    "https://gofile.io/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src ws://127.0.0.1:* http://127.0.0.1:*"
+  },
+  "background": {
+    "scripts": [
+      "lib/bridge-client.js",
+      "lib/host-download.js",
+      "lib/intercept.js",
+      "background.js"
+    ]
+  },
+  "action": {
+    "default_title": "Send to KuroAria DL",
+    "default_popup": "popup.html"
+  }
+}

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>KuroAria DL</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 0;
+        padding: 12px;
+        width: 300px;
+        font-size: 13px;
+        color: #18181b;
+      }
+      label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 500;
+      }
+      input[type="number"] {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 6px 8px;
+        margin-bottom: 10px;
+        border: 1px solid #e4e4e7;
+        border-radius: 6px;
+      }
+      label.row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 400;
+        margin-bottom: 10px;
+      }
+      button {
+        width: 100%;
+        padding: 8px;
+        border: none;
+        border-radius: 6px;
+        background: #18181b;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #27272a;
+      }
+      .hint {
+        margin-top: 10px;
+        font-size: 11px;
+        color: #71717a;
+        line-height: 1.4;
+      }
+      #status {
+        margin-bottom: 12px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        line-height: 1.4;
+        background: #f4f4f5;
+        border: 1px solid #e4e4e7;
+      }
+      #status.ok {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+        color: #166534;
+      }
+      #status.err {
+        background: #fef2f2;
+        border-color: #fecaca;
+        color: #b91c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <p id="status">Checking bridge...</p>
+
+    <label for="port">Bridge port</label>
+    <input id="port" type="number" min="1024" max="65535" value="17888" />
+
+    <label class="row">
+      <input id="intercept" type="checkbox" />
+      Intercept new Firefox downloads
+    </label>
+
+    <button id="sendTab" type="button">Send current tab URL</button>
+
+    <p class="hint">
+      In KuroAria DL: <strong>Settings → Enable bridge server</strong>, then reload
+      this extension in <code>about:debugging</code>.
+    </p>
+
+    <script src="lib/bridge-client.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

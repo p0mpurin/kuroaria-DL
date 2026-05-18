@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-background: var(--app-background);
+  --color-foreground: var(--app-foreground);
+  --color-card: var(--app-card);
+  --color-card-foreground: var(--app-card-foreground);
+  --color-muted: var(--app-muted);
+  --color-muted-foreground: var(--app-muted-foreground);
+  --color-border: var(--app-border);
+  --color-accent: var(--app-accent);
+  --color-accent-foreground: var(--app-accent-foreground);
+  --color-sidebar: var(--app-sidebar);
+  --color-sidebar-foreground: var(--app-sidebar-foreground);
+  --color-sidebar-muted: var(--app-sidebar-muted);
+  --color-sidebar-border: var(--app-sidebar-border);
+  --color-grid-line: var(--app-grid-line);
+  --color-grid-bg: var(--app-grid-bg);
+}
+
+/* Light */
+:root,
+[data-theme="light"] {
+  --app-background: #fafafa;
+  --app-foreground: #18181b;
+  --app-card: #ffffff;
+  --app-card-foreground: #18181b;
+  --app-muted: #f4f4f5;
+  --app-muted-foreground: #71717a;
+  --app-border: #e4e4e7;
+  --app-accent: #18181b;
+  --app-accent-foreground: #fafafa;
+  --app-sidebar: #09090b;
+  --app-sidebar-foreground: #fafafa;
+  --app-sidebar-muted: #a1a1aa;
+  --app-sidebar-border: #27272a;
+  --app-grid-bg: #f4f4f5;
+  --app-grid-line: rgb(228 228 231 / 0.45);
+}
+
+/* Dark (default) */
+[data-theme="dark"] {
+  --app-background: #18181b;
+  --app-foreground: #fafafa;
+  --app-card: #27272a;
+  --app-card-foreground: #fafafa;
+  --app-muted: #3f3f46;
+  --app-muted-foreground: #a1a1aa;
+  --app-border: #3f3f46;
+  --app-accent: #fafafa;
+  --app-accent-foreground: #18181b;
+  --app-sidebar: #09090b;
+  --app-sidebar-foreground: #fafafa;
+  --app-sidebar-muted: #71717a;
+  --app-sidebar-border: #27272a;
+  --app-grid-bg: #1c1c1f;
+  --app-grid-line: rgb(63 63 70 / 0.5);
+}
+
+/* Midnight — deep blue-gray */
+[data-theme="midnight"] {
+  --app-background: #0c1222;
+  --app-foreground: #e2e8f0;
+  --app-card: #151d2e;
+  --app-card-foreground: #f1f5f9;
+  --app-muted: #1e293b;
+  --app-muted-foreground: #94a3b8;
+  --app-border: #243044;
+  --app-accent: #38bdf8;
+  --app-accent-foreground: #0c1222;
+  --app-sidebar: #060a14;
+  --app-sidebar-foreground: #e2e8f0;
+  --app-sidebar-muted: #64748b;
+  --app-sidebar-border: #1e293b;
+  --app-grid-bg: #0f1628;
+  --app-grid-line: rgb(36 48 68 / 0.55);
+}
+
+/* AMOLED — pure black */
+[data-theme="amoled"] {
+  --app-background: #000000;
+  --app-foreground: #ededed;
+  --app-card: #0a0a0a;
+  --app-card-foreground: #fafafa;
+  --app-muted: #171717;
+  --app-muted-foreground: #a3a3a3;
+  --app-border: #262626;
+  --app-accent: #fafafa;
+  --app-accent-foreground: #000000;
+  --app-sidebar: #000000;
+  --app-sidebar-foreground: #fafafa;
+  --app-sidebar-muted: #737373;
+  --app-sidebar-border: #262626;
+  --app-grid-bg: #050505;
+  --app-grid-line: rgb(38 38 38 / 0.6);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  html[data-theme="light"] {
+    color-scheme: light;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+  }
+}
+
+.grid-paper {
+  background-color: var(--app-grid-bg);
+  background-image:
+    linear-gradient(to right, var(--app-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--app-grid-line) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
