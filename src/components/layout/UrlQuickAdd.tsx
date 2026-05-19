@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ClipboardPaste, Link2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { readClipboardText } from "@/lib/clipboard";
 
 interface UrlQuickAddProps {
   onAdd: (url: string) => Promise<void>;
@@ -40,7 +41,7 @@ export function UrlQuickAdd({ onAdd }: UrlQuickAddProps) {
 
   const pasteFromClipboard = async () => {
     try {
-      const text = await navigator.clipboard.readText();
+      const text = await readClipboardText();
       const url = parseUrl(text);
       if (url) {
         setValue(url);
