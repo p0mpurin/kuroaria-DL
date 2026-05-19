@@ -31,6 +31,8 @@ Upload `dist-extensions/kuroaria-dl-firefox.zip` to [addons.mozilla.org](https:/
 
 **Data collection (Firefox 140+):** The manifest declares that the extension reads download URLs (required) and may read site cookies or technical settings (optional) only to send them to **KuroAria DL on `127.0.0.1`** — nothing is sent to the developer or third-party servers.
 
+**Privacy policy (for AMO listing):** [docs/PRIVACY.md](https://github.com/p0mpurin/kuroaria-DL/blob/main/docs/PRIVACY.md)
+
 CI builds the same zip on every change to `extension/firefox/` (see `.github/workflows/firefox-extension.yml`).
 
 ### Firefox features

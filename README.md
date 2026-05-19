@@ -29,6 +29,7 @@ npm run tauri dev
 - Live speed, progress, ETA
 - Persistent state + auto-resume on startup
 - Browser extension bridge (see `docs/bridge.md`)
+- [Privacy Policy](docs/PRIVACY.md)
 
 ## Project layout
 
