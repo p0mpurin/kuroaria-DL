@@ -1,12 +1,16 @@
 {
   "manifest_version": 3,
   "name": "KuroAria DL",
-  "version": "0.2.1",
-  "description": "Send Firefox downloads to KuroAria DL",
+  "version": "0.2.2",
+  "description": "Send Firefox downloads to KuroAria DL on your PC. No remote servers — only your local app.",
   "browser_specific_settings": {
     "gecko": {
       "id": "io.kuroaria.dl@extension",
-      "strict_min_version": "114.0"
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": ["browsingActivity"],
+        "optional": ["websiteContent", "technicalAndInteraction"]
+      }
     }
   },
   "permissions": [
