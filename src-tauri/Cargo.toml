@@ -1,6 +1,6 @@
 [package]
 name = "kuroaria-dl"
-version = "0.1.1"
+version = "0.1.2"
 description = "Premium download manager powered by aria2"
 authors = ["KuroAria"]
 edition = "2021"

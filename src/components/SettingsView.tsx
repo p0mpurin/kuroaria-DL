@@ -81,7 +81,7 @@ export function SettingsView({
 
         <div className="mt-8 space-y-8 rounded-xl border border-border bg-card p-6 shadow-sm">
           <section className="space-y-4">
-            <h2 className="text-sm font-semibold text-foreground">Appearance</h2>
+            <h2 className="settings-section-title">Appearance</h2>
             <ThemePicker
               value={draft.theme}
               disabled={saving}
@@ -109,7 +109,7 @@ export function SettingsView({
           </section>
 
           <section className="space-y-4 border-t border-border pt-6">
-            <h2 className="text-sm font-semibold text-foreground">System</h2>
+            <h2 className="settings-section-title">System</h2>
             <div className="flex items-center justify-between">
               <div>
                 <Label>Start with Windows</Label>
@@ -129,7 +129,7 @@ export function SettingsView({
           </section>
 
           <section className="space-y-4 border-t border-border pt-6">
-            <h2 className="text-sm font-semibold text-foreground">Downloads</h2>
+            <h2 className="settings-section-title">Downloads</h2>
             <div className="space-y-2">
               <Label>Download directory</Label>
               <div className="flex gap-2">
@@ -170,7 +170,7 @@ export function SettingsView({
             </div>
             <div className="space-y-2">
               <Label htmlFor="split">Segments per download</Label>
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-muted-foreground">
                 Higher is faster (like the browser). Use 16 for large files.
               </p>
               <Input
@@ -187,7 +187,7 @@ export function SettingsView({
             <div className="flex items-center justify-between">
               <div>
                 <Label>Auto-start downloads</Label>
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-muted-foreground">
                   Start new downloads immediately when added
                 </p>
               </div>
@@ -202,8 +202,8 @@ export function SettingsView({
             </div>
           </section>
 
-          <section className="space-y-4 border-t border-zinc-100 pt-6">
-            <h2 className="text-sm font-semibold text-zinc-900">Bandwidth</h2>
+          <section className="space-y-4 border-t border-border pt-6">
+            <h2 className="settings-section-title">Bandwidth</h2>
             <div className="space-y-2">
               <Label htmlFor="dl-speed">
                 Max download speed (KB/s, 0 = unlimited)
@@ -237,8 +237,8 @@ export function SettingsView({
             </div>
           </section>
 
-          <section className="space-y-4 border-t border-zinc-100 pt-6">
-            <h2 className="text-sm font-semibold text-zinc-900">aria2 RPC</h2>
+          <section className="space-y-4 border-t border-border pt-6">
+            <h2 className="settings-section-title">aria2 RPC</h2>
             <div className="space-y-2">
               <Label htmlFor="rpc-url">RPC URL</Label>
               <Input
@@ -258,16 +258,15 @@ export function SettingsView({
             </div>
           </section>
 
-          <section className="space-y-4 border-t border-zinc-100 pt-6">
-            <h2 className="text-sm font-semibold text-zinc-900">
-              Browser integration
-            </h2>
-            <p className="text-xs leading-relaxed text-zinc-500">
+          <section className="space-y-4 border-t border-border pt-6">
+            <h2 className="settings-section-title">Browser integration</h2>
+            <p className="text-xs leading-relaxed text-muted-foreground">
               Enable the bridge, then install the extension: Firefox →{" "}
-              <code className="rounded bg-zinc-100 px-1">extension/firefox</code>
+              <code className="settings-inline-code">extension/firefox</code>
               , Chrome →{" "}
-              <code className="rounded bg-zinc-100 px-1">extension/chrome</code>.
-              See <code className="rounded bg-zinc-100 px-1">extension/README.md</code>.
+              <code className="settings-inline-code">extension/chrome</code>.
+              See{" "}
+              <code className="settings-inline-code">extension/README.md</code>.
             </p>
             <div className="flex items-center justify-between">
               <Label>Enable bridge server</Label>
