@@ -10,9 +10,26 @@ Send downloads from your browser to the desktop app over a local WebSocket bridg
 
 ## Firefox
 
+### Local testing (temporary add-on)
+
 1. Open `about:debugging#/runtime/this-firefox`
 2. Click **Load Temporary Add-on…**
 3. Select `extension/firefox/manifest.json` (or any file inside that folder)
+
+### Submit to Firefox Add-ons (AMO)
+
+**Do not zip the folder with Windows Explorer or `Compress-Archive`.** Those tools use backslashes (`lib\bridge-client.js`) and AMO will reject the upload.
+
+From the repo root:
+
+```bash
+npm install
+npm run package:firefox
+```
+
+Upload `dist-extensions/kuroaria-dl-firefox.zip` to [addons.mozilla.org](https://addons.mozilla.org/developers/).
+
+CI builds the same zip on every change to `extension/firefox/` (see `.github/workflows/firefox-extension.yml`).
 
 ### Firefox features
 

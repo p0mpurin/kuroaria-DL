@@ -1,0 +1,35 @@
+name: Firefox extension package
+
+on:
+  push:
+    paths:
+      - "extension/firefox/**"
+      - "scripts/package-firefox-extension.mjs"
+      - ".github/workflows/firefox-extension.yml"
+  pull_request:
+    paths:
+      - "extension/firefox/**"
+      - "scripts/package-firefox-extension.mjs"
+  workflow_dispatch:
+
+jobs:
+  package-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build AMO-compatible zip
+        run: npm run package:firefox
+
+      - name: Upload extension artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kuroaria-dl-firefox
+          path: dist-extensions/kuroaria-dl-firefox.zip
