@@ -14,6 +14,8 @@ mod runtime;
 
 mod startup;
 
+mod sort_paths;
+
 mod state;
 
 

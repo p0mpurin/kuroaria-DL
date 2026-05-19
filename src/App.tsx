@@ -50,6 +50,8 @@ const defaultSettings: AppSettings = {
 
   launch_at_login: false,
 
+  sort_by_type: true,
+
 };
 
 
@@ -247,33 +249,43 @@ function AppInner() {
 
 
   const handleCancel = async (id: string) => {
+    const item = downloads.find((d) => d.id === id);
+    const filename = item?.filename;
 
     setDownloads((prev) => prev.filter((d) => d.id !== id));
-
     if (selectedId === id) {
-
       setSelectedId(null);
-
     }
 
     try {
-
       await api.cancelDownload(id);
-
-      toast.info("Download cancelled");
-
+      toast.info("Download cancelled", filename);
     } catch (e) {
-
       console.error(e);
-
       const snapshot = await api.getSnapshot();
-
       applySnapshot(snapshot);
-
       toast.error("Cancel failed", e instanceof Error ? e.message : "Unknown error");
+    }
+  };
 
+  const handleRemove = async (id: string) => {
+    const item = downloads.find((d) => d.id === id);
+    const filename = item?.filename;
+
+    setDownloads((prev) => prev.filter((d) => d.id !== id));
+    if (selectedId === id) {
+      setSelectedId(null);
     }
 
+    try {
+      await api.removeDownload(id);
+      toast.success("File removed", filename);
+    } catch (e) {
+      console.error(e);
+      const snapshot = await api.getSnapshot();
+      applySnapshot(snapshot);
+      toast.error("Remove failed", e instanceof Error ? e.message : "Unknown error");
+    }
   };
 
 
@@ -354,6 +366,7 @@ function AppInner() {
             onResume={api.resumeDownload}
 
             onCancel={handleCancel}
+            onRemove={handleRemove}
 
             onRetry={api.retryDownload}
 

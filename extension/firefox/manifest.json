@@ -1,15 +1,23 @@
 {
   "manifest_version": 3,
   "name": "KuroAria DL",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "Send Firefox downloads to KuroAria DL",
   "browser_specific_settings": {
     "gecko": {
-      "id": "kuroaria-dl@local.dev",
+      "id": "io.kuroaria.dl@extension",
       "strict_min_version": "114.0"
     }
   },
-  "permissions": ["downloads", "activeTab", "contextMenus", "storage", "tabs", "cookies"],
+  "permissions": [
+    "downloads",
+    "activeTab",
+    "contextMenus",
+    "storage",
+    "tabs",
+    "cookies",
+    "alarms"
+  ],
   "host_permissions": [
     "http://127.0.0.1/*",
     "ws://127.0.0.1/*",
@@ -23,6 +31,7 @@
     "scripts": [
       "lib/bridge-client.js",
       "lib/host-download.js",
+      "lib/keepalive.js",
       "lib/intercept.js",
       "background.js"
     ]

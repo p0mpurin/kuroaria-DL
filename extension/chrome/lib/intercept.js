@@ -168,8 +168,9 @@
     ext.downloads?.onChanged?.addListener(onDownloadChanged);
   }
 
+  setupDownloadIntercept();
+
   refreshInterceptFlag().then(() => {
-    setupDownloadIntercept();
     ext.storage.onChanged.addListener((changes, area) => {
       if (area === "local" && changes.interceptDownloads) {
         interceptEnabled = changes.interceptDownloads.newValue === true;

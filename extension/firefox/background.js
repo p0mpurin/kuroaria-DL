@@ -15,7 +15,13 @@
     );
   }
 
-  ext.runtime.onInstalled.addListener(setupContextMenu);
+  ext.runtime.onInstalled.addListener(() => {
+    setupContextMenu();
+    console.info("KuroAria DL: extension installed / updated");
+  });
+  ext.runtime.onStartup.addListener(() => {
+    console.info("KuroAria DL: browser started, background active");
+  });
   setupContextMenu();
 
   ext.contextMenus.onClicked.addListener((info) => {

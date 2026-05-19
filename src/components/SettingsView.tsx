@@ -130,6 +130,22 @@ export function SettingsView({
 
           <section className="space-y-4 border-t border-border pt-6">
             <h2 className="settings-section-title">Downloads</h2>
+            <div className="flex items-center justify-between pb-1">
+              <div>
+                <Label>Sort into type folders</Label>
+                <p className="text-xs text-muted-foreground">
+                  Images, Videos, Archives, and more under your download folder
+                </p>
+              </div>
+              <Switch
+                checked={draft.sort_by_type ?? true}
+                disabled={saving}
+                onCheckedChange={(v) => {
+                  if (v === settings.sort_by_type) return;
+                  void saveToggle({ sort_by_type: v });
+                }}
+              />
+            </div>
             <div className="space-y-2">
               <Label>Download directory</Label>
               <div className="flex gap-2">

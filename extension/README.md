@@ -22,6 +22,8 @@ Send downloads from your browser to the desktop app over a local WebSocket bridg
 
 After changing the extension or app, reload the temporary add-on in `about:debugging`.
 
+> **“Background script: Stopped”** in `about:debugging` is normal for Manifest V3 — Firefox suspends the background when idle. Intercept still works: start a download or open the extension popup to wake it. A keepalive alarm runs every minute while the extension is loaded. For daily use, install a signed build from [GitHub Releases](https://github.com/p0mpurin/kuroaria-DL/releases) (stable extension ID `io.kuroaria.dl@extension`).
+
 > Temporary add-ons are removed when Firefox restarts. Reload the same way after a restart.
 
 ### Troubleshooting intercept

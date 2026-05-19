@@ -12,6 +12,7 @@ interface MainPanelProps {
   onPause: (id: string) => void;
   onResume: (id: string) => void;
   onCancel: (id: string) => void;
+  onRemove: (id: string) => void;
   onRetry: (id: string) => void;
   onOpenFolder: (id: string) => void;
   onAddUrl: (url: string) => Promise<void>;
@@ -61,6 +62,7 @@ export function MainPanel({
   onPause,
   onResume,
   onCancel,
+  onRemove,
   onRetry,
   onOpenFolder,
   onAddUrl,
@@ -121,6 +123,7 @@ export function MainPanel({
                   onPause={() => onPause(d.id)}
                   onResume={() => onResume(d.id)}
                   onCancel={() => onCancel(d.id)}
+                  onRemove={() => onRemove(d.id)}
                   onRetry={() => onRetry(d.id)}
                   onOpenFolder={() => onOpenFolder(d.id)}
                 />

@@ -21,6 +21,7 @@ use crate::models::{
     PersistedState,
 };
 use crate::persistence::Store;
+use crate::sort_paths::{resolve_download_dir, SORT_SUBDIRS};
 
 pub struct AppState {
     pub downloads: Vec<DownloadItem>,
@@ -93,10 +94,24 @@ impl AppState {
     }
 
     fn sweep_orphan_files_in_download_dir(&self) {
-        cleanup_orphan_aria2_control_files(
+        let names = self.active_download_basenames();
+        cleanup_orphan_aria2_control_files(&self.settings.download_dir, &names);
+        if self.settings.sort_by_type {
+            for sub in SORT_SUBDIRS {
+                let subdir = format!("{}/{}", self.settings.download_dir, sub);
+                cleanup_orphan_aria2_control_files(&subdir, &names);
+            }
+        }
+    }
+
+    fn download_dir_for(&self, filename: &str) -> String {
+        resolve_download_dir(
             &self.settings.download_dir,
-            &self.active_download_basenames(),
-        );
+            filename,
+            self.settings.sort_by_type,
+        )
+        .to_string_lossy()
+        .into_owned()
     }
 
     pub fn set_app(&mut self, app: AppHandle) {
@@ -334,10 +349,12 @@ impl AppState {
                 .iter()
                 .find(|d| d.id == id)
                 .ok_or_else(|| anyhow!("download not found"))?;
+            let filename = sanitize_filename(&item.filename);
+            let dir = self.download_dir_for(&filename);
             (
                 item.url.clone(),
-                sanitize_filename(&item.filename),
-                self.settings.download_dir.clone(),
+                filename,
+                dir,
                 self.settings.split,
                 self.settings.auto_start,
                 item.referer.clone(),
@@ -369,6 +386,7 @@ impl AppState {
         if let Some(item) = self.downloads.iter_mut().find(|d| d.id == id) {
             item.gid = Some(gid);
             item.filename = filename.clone();
+            item.dir = dir.clone();
             item.status = if paused {
                 DownloadStatus::Waiting
             } else {
@@ -488,19 +506,21 @@ impl AppState {
                 .unwrap_or_else(|| filename_from_url(&req.url)),
         );
 
+        let download_dir = self.download_dir_for(&filename);
+
         let id = Uuid::new_v4().to_string();
         let mut item = DownloadItem {
             id: id.clone(),
             gid: None,
             url: req.url.clone(),
-            filename,
+            filename: filename.clone(),
             status: DownloadStatus::Waiting,
             total_length: 0,
             completed_length: 0,
             download_speed: 0,
             progress_percent: 0.0,
             eta_seconds: 0.0,
-            dir: self.settings.download_dir.clone(),
+            dir: download_dir,
             connections: self.settings.split,
             error_message: None,
             referer: req.referer.clone(),
@@ -510,6 +530,11 @@ impl AppState {
             added_at: Utc::now().to_rfc3339(),
         };
         item.push_log("SYSTEM", "Download added to queue.");
+        if self.settings.sort_by_type {
+            if let Some(sub) = crate::sort_paths::category_subdir(&filename) {
+                item.push_log("SYSTEM", format!("Saving to {sub}/ folder."));
+            }
+        }
         if is_gofile_page_or_api_url(&req.url) {
             item.push_log(
                 "WARNING",
@@ -679,6 +704,42 @@ impl AppState {
     }
 
     pub async fn remove_download(&mut self, id: &str) -> Result<()> {
+        let (status, gid, dir, filename) = self
+            .downloads
+            .iter()
+            .find(|d| d.id == id)
+            .map(|d| {
+                (
+                    d.status,
+                    d.gid.clone(),
+                    d.dir.clone(),
+                    d.filename.clone(),
+                )
+            })
+            .ok_or_else(|| anyhow!("download not found"))?;
+
+        if status == DownloadStatus::Complete {
+            let mut paths_to_delete: Vec<String> = Vec::new();
+            if self.aria2_connected {
+                if let Some(ref gid) = gid {
+                    if let Ok(status) = self.client().tell_status(gid).await {
+                        paths_to_delete = paths_from_status(&status);
+                    }
+                    self.client().remove_download_result(gid).await.ok();
+                    self.client().purge_download_result().await.ok();
+                    self.client().save_session().await.ok();
+                }
+            }
+            cleanup_download_artifacts(&dir, &filename, &paths_to_delete);
+            self.downloads.retain(|d| d.id != id);
+            if self.selected_id.as_deref() == Some(id) {
+                self.selected_id = None;
+            }
+            self.sweep_orphan_files_in_download_dir();
+            self.commit()?;
+            return Ok(());
+        }
+
         self.cancel_download(id).await
     }
 

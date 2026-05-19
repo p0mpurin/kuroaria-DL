@@ -50,6 +50,7 @@ export interface AppSettings {
   theme: AppTheme;
   minimize_to_tray: boolean;
   launch_at_login: boolean;
+  sort_by_type: boolean;
 }
 
 export interface DownloadsSnapshot {

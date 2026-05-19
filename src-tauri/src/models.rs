@@ -62,6 +62,13 @@ pub struct AppSettings {
     pub minimize_to_tray: bool,
     #[serde(default)]
     pub launch_at_login: bool,
+    /// Save files into Images, Archives, etc. under the download folder.
+    #[serde(default = "default_sort_by_type")]
+    pub sort_by_type: bool,
+}
+
+fn default_sort_by_type() -> bool {
+    true
 }
 
 fn default_theme() -> String {
@@ -93,6 +100,7 @@ impl Default for AppSettings {
             theme: default_theme(),
             minimize_to_tray: default_minimize_to_tray(),
             launch_at_login: false,
+            sort_by_type: default_sort_by_type(),
         }
     }
 }

@@ -5,6 +5,7 @@ import {
   Play,
   RefreshCw,
   Square,
+  Trash2,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn, formatBytes, formatEta, formatSpeed } from "@/lib/utils";
@@ -17,6 +18,7 @@ interface DownloadCardProps {
   onPause: () => void;
   onResume: () => void;
   onCancel: () => void;
+  onRemove: () => void;
   onRetry: () => void;
   onOpenFolder: () => void;
 }
@@ -28,6 +30,7 @@ export function DownloadCard({
   onPause,
   onResume,
   onCancel,
+  onRemove,
   onRetry,
   onOpenFolder,
 }: DownloadCardProps) {
@@ -148,11 +151,12 @@ export function DownloadCard({
               </button>
               <button
                 type="button"
-                onClick={onCancel}
-                className="rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
-                aria-label="Remove from list"
+                onClick={onRemove}
+                className="rounded-md p-1.5 text-muted-foreground hover:bg-red-500/15 hover:text-red-400"
+                aria-label="Delete file and remove from list"
+                title="Delete file and remove from list"
               >
-                <Square className="h-3.5 w-3.5" />
+                <Trash2 className="h-3.5 w-3.5" />
               </button>
             </>
           )}

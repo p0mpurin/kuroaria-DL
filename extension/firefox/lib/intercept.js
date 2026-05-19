@@ -250,9 +250,11 @@
     console.info("KuroAria DL: intercept listeners ready (incl. risky downloads)");
   }
 
+  // Register listeners immediately so intercept works before async storage read.
+  setupDownloadIntercept();
+
   async function bootstrap() {
     await refreshInterceptFlag();
-    setupDownloadIntercept();
 
     ext.storage.onChanged.addListener((changes, area) => {
       if (area !== "local" || !changes.interceptDownloads) {
